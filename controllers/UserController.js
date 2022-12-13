@@ -7,24 +7,30 @@ const firestore = firebase.firestore();
 
 const getAllUsers = async (req, res, next) => {
     const user = firebase.auth().currentUser;
-    const me = await firestore.collection('users').doc(user.uid);
-    const data = await me.get();
-    if (user && data.data().state == "customer") {
-        try {
-            const users = await firestore.collection('users');
-            const data = await users.where("state", "==", "housekeeper").get();
-            const usersArray = [];
-            if (data.empty) {
-                res.status(404).send('No User record found');
-            } else {
-                data.forEach(doc => {
-                    usersArray.push(doc.data());
-                });
-                res.send(usersArray);
+    if (user) {
+        const me = await firestore.collection('users').doc(user.uid);
+        const data = await me.get();
+        if (data.data().state == "customer") {
+            try {
+                const users = await firestore.collection('users');
+                const data = await users.where("state", "==", "housekeeper").get();
+                const usersArray = [];
+                if (data.empty) {
+                    res.status(404).send('No User record found');
+                } else {
+                    data.forEach(doc => {
+                        usersArray.push(doc.data());
+                    });
+                    res.send(usersArray);
+                }
+            } catch (error) {
+                res.status(400).send(error.message);
             }
-        } catch (error) {
-            res.status(400).send(error.message);
         }
+        else {
+            res.status(403).json("Acces Denied!");
+        }
+
     }
     else {
         res.status(403).json("Acces Denied!");
