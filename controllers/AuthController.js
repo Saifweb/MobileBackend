@@ -22,12 +22,7 @@ const signup = async (req, res) => {
             .catch(function (error) {
                 let errorcode = error.code;
                 let errormessage = error.message;
-                if (errorcode == "auth/weak-password") {
-                    return res.status(500).json({ error: errormessage });
-                }
-                else {
-                    return res.status(500).json({ error: errormessage })
-                }
+                return res.status(500).json({ error: errormessage });
             })
     }
 
@@ -59,18 +54,14 @@ const forgetPassword = (req, res) => {
         .auth()
         .sendPasswordResetEmail(req.body.email)
         .then(function () {
-            console.log("sssssss");
             return res.status(200).json({ status: "Password Reset Email Sent" });
         })
         .catch(function (error) {
             console.log(error);
             let errorCode = error.code;
             let errorMessage = error.message;
-            if (errorCode == "auth/invalid-email") {
-                return res.status(500).json({ error: errorMessage });
-            } else if (errorCode == "auth/user-not-found") {
-                return res.status(500).json({ error: errorMessage });
-            }
+            return res.status(500).json({ error: errorMessage });
+
         });
 };
 
