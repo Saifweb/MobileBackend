@@ -63,7 +63,8 @@ const getAllReservations = async (req, res, next) => {
         }
     }
     else {
-        res.send("Acces Denied !")
+        //because you dont have acces !
+        res.status(400).send("Acces Denied !")
     }
 }
 
