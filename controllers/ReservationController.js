@@ -46,7 +46,14 @@ const getAllReservations = async (req, res, next) => {
             } else {
                 data.forEach(doc => {
                     if (doc.data().state == "pending" && (user.uid == doc.data().housekeeper_id || user.uid == doc.data().customer_id)) {
-                        reservationsArray.push(doc.data());
+                        var reservationsObject = new Object;
+                        reservationsObject["id"] = doc.id
+                        reservationsObject["state"] = doc.data().state
+                        reservationsObject["customer_id"] = doc.data().customer_id
+                        reservationsObject["type"] = doc.data().type
+                        reservationsObject["start_date"] = doc.data().start_date
+                        reservationsObject["end_date"] = doc.data().end_date
+                        reservationsArray.push(reservationsObject);
                     }
                 });
                 res.send(reservationsArray);

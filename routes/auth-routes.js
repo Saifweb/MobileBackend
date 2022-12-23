@@ -10,6 +10,7 @@ router.post('/signin', [check('email').exists().withMessage("email is required !
 router.post('/forgetPassword', forgetPassword);
 router.post('/signout', signout);
 
+
 module.exports = {
     routes: router
 }

@@ -1,11 +1,10 @@
 const firebase = require('../db');
 const firestore = firebase.firestore();
 const { validationResult } = require("express-validator")
-
 const signup = async (req, res) => {
     var errors = validationResult(req)
     if (!errors.isEmpty()) {
-        res.json(errors.array())
+        res.status(422).json(errors.array())
     }
     else {
         firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password).then(async (data) => {
@@ -14,20 +13,19 @@ const signup = async (req, res) => {
                 "name": req.body.name,
                 "phoneNumber": req.body.phoneNumber,
                 "state": req.body.state,
-                "age": req.body.age
+                "age": req.body.age,
+                "photoUrl": req.photoUrl
             }
             await firestore.collection('users').doc(data.user.uid).set(userProfil);
             res.send("user added Succesfully!");
         })
             .catch(function (error) {
-                let errorcode = error.code;
                 let errormessage = error.message;
                 return res.status(500).json({ error: errormessage });
             })
     }
 
 }
-
 const signin = (req, res) => {
     if (!req.body.email || !req.body.password) {
         return res.status(422).json({
