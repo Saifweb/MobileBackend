@@ -54,7 +54,7 @@ const updateUser = async (req, res, next) => {
     }
 
 }
-const getUser = async (req, res, next) => {
+const getMyProfil = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
         try {
@@ -74,6 +74,27 @@ const getUser = async (req, res, next) => {
     }
 
 }
+const getUser = async (req, res, next) => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        try {
+            const id = req.params.id
+            const me = await firestore.collection('users').doc(id);
+            const data = await me.get();
+            if (!data.exists) {
+                res.status(404).send('User with the given ID not found');
+            } else {
+                res.send(data.data());
+            }
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+    else {
+        res.status(403).json("Acces Denied !")
+    }
+
+}
 module.exports = {
-    getAllUsers, updateUser, getUser
+    getAllUsers, updateUser, getUser, getMyProfil
 }

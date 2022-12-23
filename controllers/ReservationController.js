@@ -36,6 +36,7 @@ const Create = async (req, res, next) => {
 
 const getAllReservations = async (req, res, next) => {
     const user = firebase.auth().currentUser
+    console.log(typeof (user.uid));
     if (user) {
         try {
             const reservations = await firestore.collection('reservations');
@@ -45,7 +46,7 @@ const getAllReservations = async (req, res, next) => {
                 res.status(404).send('No Reservations record found');
             } else {
                 data.forEach(doc => {
-                    if (doc.data().state == "pending" && (user.uid == doc.data().housekeeper_id || user.uid == doc.data().customer_id)) {
+                    if (doc.data().state != "done" && (user.uid == doc.data().housekeeper_id || user.uid == doc.data().customer_id)) {
                         var reservationsObject = new Object;
                         reservationsObject["id"] = doc.id
                         reservationsObject["state"] = doc.data().state
@@ -73,6 +74,7 @@ const ApproveState = async (req, res, next) => {
     if (user) {
         try {
             const id = req.params.id
+            console.log(typeof (id))
             const jsonUser = {
                 "state": "approved",
             };
