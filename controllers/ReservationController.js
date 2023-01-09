@@ -4,7 +4,7 @@ const firebase = require('../db');
 
 const firestore = firebase.firestore();
 const { validationResult } = require("express-validator")
-
+//Create Reservations!
 const Create = async (req, res, next) => {
     var errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -33,7 +33,7 @@ const Create = async (req, res, next) => {
         }
     }
 }
-
+//Get all Reservations not done yet ! 
 const getAllReservations = async (req, res, next) => {
     const user = firebase.auth().currentUser
     console.log(typeof (user.uid));
@@ -68,7 +68,42 @@ const getAllReservations = async (req, res, next) => {
         res.status(400).send("Acces Denied !")
     }
 }
-
+// got all done Reservations
+const getDoneReservations = async (req, res, next) => {
+    const user = firebase.auth().currentUser
+    console.log(typeof (user.uid));
+    if (user) {
+        try {
+            const reservations = await firestore.collection('reservations');
+            const data = await reservations.where("state", "==", "done").get();
+            const reservationsArray = [];
+            if (data.empty) {
+                res.status(404).send('No Reservations Done record found');
+            } else {
+                data.forEach(doc => {
+                    if ((user.uid == doc.data().housekeeper_id || user.uid == doc.data().customer_id)) {
+                        var reservationsObject = new Object;
+                        reservationsObject["id"] = doc.id
+                        reservationsObject["state"] = doc.data().state
+                        reservationsObject["customer_id"] = doc.data().customer_id
+                        reservationsObject["type"] = doc.data().type
+                        reservationsObject["start_date"] = doc.data().start_date
+                        reservationsObject["end_date"] = doc.data().end_date
+                        reservationsArray.push(reservationsObject);
+                    }
+                });
+                res.send(reservationsArray);
+            }
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+    else {
+        //because you dont have acces !
+        res.status(400).send("Acces Denied !")
+    }
+}
+//Approve state reservations
 const ApproveState = async (req, res, next) => {
     var user = firebase.auth().currentUser
     if (user) {
@@ -96,7 +131,7 @@ const ApproveState = async (req, res, next) => {
         res.send("Acces Denied!")
     }
 }
-
+// Make State Done 
 const StateDone = async (req, res, next) => {
     var user = firebase.auth().currentUser
     if (user) {
@@ -123,6 +158,7 @@ const StateDone = async (req, res, next) => {
         res.send("Acces Denied!")
     }
 }
+//Reject Reservations
 const RejectState = async (req, res, next) => {
     var user = firebase.auth().currentUser
     if (user) {
@@ -151,6 +187,7 @@ const RejectState = async (req, res, next) => {
     }
 
 }
+//Give Rate for housekeeper ! 
 const giverate = async (req, res, next) => {
     var errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -183,5 +220,5 @@ const giverate = async (req, res, next) => {
     }
 }
 module.exports = {
-    Create, ApproveState, RejectState, getAllReservations, giverate, StateDone
+    Create, ApproveState, RejectState, getAllReservations, giverate, StateDone, getDoneReservations
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { Create, ApproveState, RejectState, getAllReservations, giverate, StateDone } = require('../controllers/ReservationController');
+const { Create, ApproveState, RejectState, getAllReservations, giverate, StateDone, getDoneReservations } = require('../controllers/ReservationController');
 
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.put('/reservation/approve/:id', ApproveState);
 router.put('/reservation/reject/:id', RejectState);
 router.put('/reservation/done/:id', StateDone);
 router.get('/reservations', getAllReservations);
+router.get('/reservations_done', getDoneReservations);
 router.post('/giverate/:reservation_id', [check('rate').exists().withMessage("rate is required!")], giverate);
 
 module.exports = {
