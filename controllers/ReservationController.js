@@ -187,6 +187,7 @@ const RejectState = async (req, res, next) => {
     }
 
 }
+//Rate
 //Give Rate for housekeeper ! 
 const giverate = async (req, res, next) => {
     var errors = validationResult(req)

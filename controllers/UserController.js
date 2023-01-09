@@ -4,7 +4,7 @@ const firebase = require('../db');
 
 
 const firestore = firebase.firestore();
-
+//User
 const getAllUsers = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
