@@ -189,6 +189,7 @@ const RejectState = async (req, res, next) => {
 
 }
 //Rate
+
 //Give Rate for housekeeper ! 
 const giverate = async (req, res, next) => {
     var errors = validationResult(req)
@@ -231,6 +232,14 @@ const giverate = async (req, res, next) => {
 
     }
 }
+
+//giveglobalrate
+const giveGlobalRate = async (req, res, next) => {
+    const users = await firestore.collection('users');
+    const data = await users.get();
+    const usersArray = [];
+}
+
 module.exports = {
     Create, ApproveState, RejectState, getAllReservations, giverate, StateDone, getDoneReservations
 }
