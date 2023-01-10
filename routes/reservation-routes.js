@@ -12,7 +12,7 @@ router.put('/reservation/reject/:id', RejectState);
 router.put('/reservation/done/:id', StateDone);
 router.get('/reservations', getAllReservations);
 router.get('/reservations_done', getDoneReservations);
-router.put('/giverate/:reservation_id', [check('rate').exists().withMessage("rate is required!")], giverate);
+router.put('/giverate/:id', [check('rate').exists().withMessage("rate is required!")], giverate);
 
 module.exports = {
     routes: router

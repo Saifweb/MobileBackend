@@ -72,7 +72,6 @@ const getAllReservations = async (req, res, next) => {
 // get all done Reservations
 const getDoneReservations = async (req, res, next) => {
     const user = firebase.auth().currentUser
-    console.log(typeof (user.uid));
     if (user) {
         try {
             const reservations = await firestore.collection('reservations');
@@ -197,29 +196,39 @@ const giverate = async (req, res, next) => {
         res.json(errors.array())
     }
     else {
-        var user = firebase.auth().currentUser
         try {
-            var reservation = await firestore.collection('reservations').doc(req.params.reservation_id);
-            var Ourreservation = await reservation.get()
-        }
-        catch {
-            res.status(403).json("reservation dosent exist !")
-        }
-        if (user && Ourreservation.data().status == "done" && Ourreservation.data().customer_id == user.uid) {
-            try {
-                var jsonRate = {
-                    "rate": req.body.rate,
-                };
-                await reservation.update(jsonRate);
-                res.status(200).json("Thanks for rating this reservations")
+            var user = firebase.auth().currentUser
+            if (user) {
+                console.log(user.uid)
+                console.log(req.params.id)
+                var reservation = await firestore.collection('reservations').doc(req.params.id);
+                var Ourreservation = await reservation.get()
+                if (Ourreservation.data().customer_id == user.uid) {
+                    try {
+                        var jsonRate = {
+                            "rate": req.body.rate,
+                        };
+                        await reservation.update(jsonRate);
+                        res.status(200).json("Thanks for rating this reservations")
 
-            } catch (error) {
-                res.status(400).send(error.message);
+                    } catch (error) {
+                        res.status(400).send(error.message);
+                    }
+                }
+                else {
+                    console.log(user.uid)
+                    res.status(403).json("reservation dosent exist !")
+                }
+            }
+            else {
+                res.status(403).json("Acces Denied yala!")
             }
         }
-        else {
-            res.send("Acces Denied !")
+        catch (e) {
+            console.log(e);
+            res.status(403).json("reservation dosent exist !")
         }
+
     }
 }
 module.exports = {
