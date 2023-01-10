@@ -19,7 +19,14 @@ const getAllUsers = async (req, res, next) => {
                     res.status(404).send('No User record found');
                 } else {
                     data.forEach(doc => {
-                        usersArray.push(doc.data());
+                        var UserObject = new Object;
+                        UserObject["id"] = doc.id
+                        UserObject["state"] = doc.data().state
+                        UserObject["age"] = doc.data().age
+                        UserObject["location"] = doc.data().location
+                        UserObject["name"] = doc.data().name
+                        UserObject["phoneNumber"] = doc.data().phoneNumber
+                        usersArray.push(UserObject);
                     });
                     res.send(usersArray);
                 }

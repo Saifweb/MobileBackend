@@ -232,14 +232,52 @@ const giverate = async (req, res, next) => {
 
     }
 }
+var housekeeper_ids = [];
+var housekeeper_rates = [];
 
 //giveglobalrate
-const giveGlobalRate = async (req, res, next) => {
+const getHouseKeeper = async (req, res, next) => {
     const users = await firestore.collection('users');
-    const data = await users.get();
-    const usersArray = [];
+    const data = await users.where("state", "==", "housekeeper").get();
+    if (data.empty) {
+        res.status(404).send('No Reservations record found');
+    } else {
+        data.forEach(doc => {
+            housekeeper_ids.push(doc.id);
+        });
+        res.send(usersArray);
+    }
+}
+const giveGlobalRate = async (req, res, next) => {
+    getHouseKeeper;
+    var rates;
+    var j = 0;
+    housekeeper_ids.forEach(async id => {
+        try {
+            const reservation = await firestore.collection('reservations');
+            const data = await reservation.where("housekeeper_id", "==", id).get();
+            if (data.empty) {
+                housekeeper_rates[id] = 0;
+            }
+            else {
+                data.forEach(doc => {
+                    j = j + 1;
+                    rates = rates + doc.data().rate
+                })
+                housekeeper_rates[id] = rates / j;
+            }
+
+        }
+        catch {
+            res.status(403).send("error !")
+        }
+
+
+    })
+    res.status(200).send("Global Rate done !")
+
 }
 
 module.exports = {
-    Create, ApproveState, RejectState, getAllReservations, giverate, StateDone, getDoneReservations
+    Create, ApproveState, RejectState, getAllReservations, giverate, StateDone, getDoneReservations, giveGlobalRate
 }
