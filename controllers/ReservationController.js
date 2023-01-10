@@ -51,6 +51,7 @@ const getAllReservations = async (req, res, next) => {
                         reservationsObject["id"] = doc.id
                         reservationsObject["state"] = doc.data().state
                         reservationsObject["customer_id"] = doc.data().customer_id
+                        reservationsObject["housekeeper_id"] = doc.data().housekeeper_id
                         reservationsObject["type"] = doc.data().type
                         reservationsObject["start_date"] = doc.data().start_date
                         reservationsObject["end_date"] = doc.data().end_date
@@ -68,7 +69,7 @@ const getAllReservations = async (req, res, next) => {
         res.status(400).send("Acces Denied !")
     }
 }
-// got all done Reservations
+// get all done Reservations
 const getDoneReservations = async (req, res, next) => {
     const user = firebase.auth().currentUser
     console.log(typeof (user.uid));
@@ -86,6 +87,7 @@ const getDoneReservations = async (req, res, next) => {
                         reservationsObject["id"] = doc.id
                         reservationsObject["state"] = doc.data().state
                         reservationsObject["customer_id"] = doc.data().customer_id
+                        reservationsObject["housekeeper_id"] = doc.data().housekeeper_id
                         reservationsObject["type"] = doc.data().type
                         reservationsObject["start_date"] = doc.data().start_date
                         reservationsObject["end_date"] = doc.data().end_date
