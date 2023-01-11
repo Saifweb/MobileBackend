@@ -26,6 +26,7 @@ const getAllUsers = async (req, res, next) => {
                         UserObject["location"] = doc.data().location
                         UserObject["name"] = doc.data().name
                         UserObject["phoneNumber"] = doc.data().phoneNumber
+                        UserObject["rate"] = doc.data().rate || "no rate"
                         usersArray.push(UserObject);
                     });
                     res.send(usersArray);

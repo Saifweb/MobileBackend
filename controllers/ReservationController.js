@@ -20,6 +20,8 @@ const Create = async (req, res, next) => {
                     "end_date": req.body.end_date,
                     "type": req.body.type,
                     "housekeeper_id": req.params.housekeeper_id,
+                    "location": req.body.location,
+                    "price": req.body.price,
                     "state": "pending",
                 };
                 await firestore.collection('reservations').doc().set(jsonUser);
@@ -36,7 +38,6 @@ const Create = async (req, res, next) => {
 //Get all Reservations not done yet ! 
 const getAllReservations = async (req, res, next) => {
     const user = firebase.auth().currentUser
-    console.log(typeof (user.uid));
     if (user) {
         try {
             const reservations = await firestore.collection('reservations');
@@ -55,6 +56,8 @@ const getAllReservations = async (req, res, next) => {
                         reservationsObject["type"] = doc.data().type
                         reservationsObject["start_date"] = doc.data().start_date
                         reservationsObject["end_date"] = doc.data().end_date
+                        reservationsObject["location"] = doc.data().location
+                        reservationsObject["price"] = doc.data().price
                         reservationsArray.push(reservationsObject);
                     }
                 });

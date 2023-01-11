@@ -14,7 +14,7 @@ const signup = async (req, res) => {
                 "phoneNumber": req.body.phoneNumber,
                 "state": req.body.state,
                 "age": req.body.age,
-                "photoUrl": req.photoUrl
+                "location": req.body.location,
             }
             await firestore.collection('users').doc(data.user.uid).set(userProfil);
             res.send("user added Succesfully!");
