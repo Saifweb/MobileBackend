@@ -212,6 +212,7 @@ const giverate = async (req, res, next) => {
                         await reservation.update(jsonRate);
                         var housekeeperData = await firestore.collection("users").doc(Ourreservation.data().housekeeper_id)
                         var housekeeper = await housekeeperData.get();
+                        //if rate exist do this then dont 
                         if (housekeeper.data().rate) {
                             var x = (req.body.rate + housekeeper.data().rate) / 2;
                             console.log(x);
