@@ -18,6 +18,7 @@ const getAllUsers = async (req, res, next) => {
                 if (data.empty) {
                     res.status(404).send('No User record found');
                 } else {
+                    // we return !
                     data.forEach(doc => {
                         var UserObject = new Object;
                         UserObject["id"] = doc.id
