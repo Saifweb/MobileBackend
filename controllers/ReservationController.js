@@ -93,6 +93,8 @@ const getDoneReservations = async (req, res, next) => {
                         reservationsObject["type"] = doc.data().type
                         reservationsObject["start_date"] = doc.data().start_date
                         reservationsObject["end_date"] = doc.data().end_date
+                        reservationsObject["location"] = doc.data().location || "no location found "
+                        reservationsObject["price"] = doc.data().price || 0;
                         reservationsArray.push(reservationsObject);
                     }
                 });
