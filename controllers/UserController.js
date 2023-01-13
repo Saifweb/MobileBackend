@@ -157,6 +157,7 @@ const addFav = async (req, res) => {
 
 
     } else {
+        //send
         res.status(403).send("Acces Denied !")
     }
 }
@@ -171,22 +172,16 @@ const getFav = async (req, res) => {
     if (user) {
         const me = await firestore.collection('users').doc(user.uid);
         const data = await me.get();
-
         const tab = await data.data().fav;
-
         console.log(tab);
         const usersArray = [];
 
         await tab.forEach(async (favUser) => {
-
             const favusers = await firestore.collection('users').doc(favUser).get();
             console.log(favusers.data());
             usersArray.push(favusers.data());
             console.log("hi", usersArray);
-
         })
-
-
         await delay(4000);
         res.status(200).json(usersArray);
 
