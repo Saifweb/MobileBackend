@@ -135,9 +135,6 @@ const getUser = async (req, res, next) => {
 }
 const addFav = async (req, res) => {
     const user = await firebase.auth().currentUser;
-
-    console.log("user");
-
     if (user) {
         const me = await firestore.collection('users').doc(user.uid);
         const data = await me.get();
@@ -160,7 +157,7 @@ const addFav = async (req, res) => {
 
 
     } else {
-        console.log("error")
+        res.status(403).send("Acces Denied !")
     }
 }
 
@@ -170,8 +167,6 @@ function delay(time) {
 
 const getFav = async (req, res) => {
     const user = await firebase.auth().currentUser;
-
-    console.log("user");
 
     if (user) {
         const me = await firestore.collection('users').doc(user.uid);
@@ -193,10 +188,10 @@ const getFav = async (req, res) => {
 
 
         await delay(4000);
-        res.send(usersArray);
+        res.status(200).json(usersArray);
 
     } else {
-        console.log("error")
+        res.status(403).json("Acced Denied !")
     }
 }
 
