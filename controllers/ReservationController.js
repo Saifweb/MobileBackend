@@ -249,9 +249,6 @@ const giverate = async (req, res, next) => {
     }
 }
 
-
-
-
 module.exports = {
     Create, ApproveState, RejectState, getAllReservations, giverate, StateDone, getDoneReservations
 }

@@ -63,6 +63,36 @@ const updateUser = async (req, res, next) => {
     }
 
 }
+const updateEmail = async (req, res) => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        user.updateEmail(req.body.email).then(() => {
+            console.log('updated email');
+            res.status(200).json("updated email");
+
+        }).catch((error) => {
+            res.status(403).json(error)
+        })
+    }
+    else {
+        res.status(403).json("Acced Denied!");
+    }
+}
+const updatePass = async (req, res) => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        user.updatePassword(req.body.password).then(() => {
+            console.log('updated password');
+            res.status(200).json("updated Password");
+
+        }).catch((error) => {
+            res.status(403).json(error)
+        })
+    }
+    else {
+        res.status(403).json("Acced Denied!");
+    }
+}
 const getMyProfil = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -105,5 +135,5 @@ const getUser = async (req, res, next) => {
 
 }
 module.exports = {
-    getAllUsers, updateUser, getUser, getMyProfil
+    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass
 }
