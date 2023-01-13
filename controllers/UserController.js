@@ -132,8 +132,74 @@ const getUser = async (req, res, next) => {
     else {
         res.status(403).json("Acces Denied !")
     }
-
 }
+const addFav = async (req, res) => {
+    const user = await firebase.auth().currentUser;
+
+    console.log("user");
+
+    if (user) {
+        const me = await firestore.collection('users').doc(user.uid);
+        const data = await me.get();
+
+        console.log(await data.data().fav)
+
+        const tab = await data.data().fav;
+
+        console.log(tab);
+
+        await tab.push(req.body.fav);
+
+        console.log(tab);
+
+        await me.update({ "fav": tab });
+
+        console.log(data.data().fav);
+
+        res.status(200).send(tab);
+
+
+    } else {
+        console.log("error")
+    }
+}
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
+const getFav = async (req, res) => {
+    const user = await firebase.auth().currentUser;
+
+    console.log("user");
+
+    if (user) {
+        const me = await firestore.collection('users').doc(user.uid);
+        const data = await me.get();
+
+        const tab = await data.data().fav;
+
+        console.log(tab);
+        const usersArray = [];
+
+        await tab.forEach(async (favUser) => {
+
+            const favusers = await firestore.collection('users').doc(favUser).get();
+            console.log(favusers.data());
+            usersArray.push(favusers.data());
+            console.log("hi", usersArray);
+
+        })
+
+
+        await delay(4000);
+        res.send(usersArray);
+
+    } else {
+        console.log("error")
+    }
+}
+
 module.exports = {
-    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass
+    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, getFav, addFav
 }
