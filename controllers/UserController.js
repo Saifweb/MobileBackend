@@ -136,26 +136,17 @@ const getUser = async (req, res, next) => {
 const addFav = async (req, res) => {
     const user = await firebase.auth().currentUser;
     if (user) {
+
         const me = await firestore.collection('users').doc(user.uid);
         const data = await me.get();
-
         console.log(await data.data().fav)
-
         const tab = await data.data().fav;
-
         console.log(tab);
-
         await tab.push(req.body.fav);
-
         console.log(tab);
-
         await me.update({ "fav": tab });
-
         console.log(data.data().fav);
-
         res.status(200).send(tab);
-
-
     } else {
         //send
         res.status(403).send("Acces Denied !")
