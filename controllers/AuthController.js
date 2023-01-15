@@ -26,14 +26,14 @@ const signup = async (req, res) => {
     }
 
 }
-const signin = (req, res) => {
+const signin = async (req, res) => {
     if (!req.body.email || !req.body.password) {
         return res.status(422).json({
             email: "email is required!",
             password: "password is required !",
         })
     }
-    firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then((user) => {
+    await firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then((user) => {
         return res.status(200).json(user);
     })
         .catch(function (error) {
