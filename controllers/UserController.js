@@ -10,36 +10,31 @@ const getAllUsers = async (req, res, next) => {
     if (user) {
         const me = await firestore.collection('users').doc(user.uid);
         const data = await me.get();
-        if (data.data().state == "customer") {
-            try {
-                const users = await firestore.collection('users');
-                const data = await users.where("state", "==", "housekeeper").get();
-                const usersArray = [];
-                if (data.empty) {
-                    res.status(404).send('No User record found');
-                } else {
-                    // we return !
-                    data.forEach(doc => {
-                        var UserObject = new Object;
-                        UserObject["id"] = doc.id
-                        UserObject["state"] = doc.data().state
-                        UserObject["age"] = doc.data().age
-                        UserObject["location"] = doc.data().location
-                        UserObject["name"] = doc.data().name
-                        UserObject["phoneNumber"] = doc.data().phoneNumber
-                        UserObject["rate"] = doc.data().rate || 0
-                        usersArray.push(UserObject);
-                    });
-                    res.send(usersArray);
-                }
-            } catch (error) {
-                res.status(400).send(error.message);
-            }
-        }
-        else {
-            res.status(403).json("Acces Denied!");
-        }
 
+        try {
+            const users = await firestore.collection('users');
+            const data = await users.where("state", "==", "housekeeper").get();
+            const usersArray = [];
+            if (data.empty) {
+                res.status(404).send('No User record found');
+            } else {
+                // we return !
+                data.forEach(doc => {
+                    var UserObject = new Object;
+                    UserObject["id"] = doc.id
+                    UserObject["state"] = doc.data().state
+                    UserObject["age"] = doc.data().age
+                    UserObject["location"] = doc.data().location
+                    UserObject["name"] = doc.data().name
+                    UserObject["phoneNumber"] = doc.data().phoneNumber
+                    UserObject["rate"] = doc.data().rate || 0
+                    usersArray.push(UserObject);
+                });
+                res.send(usersArray);
+            }
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
     }
     else {
         res.status(403).json("Acces Denied!");
@@ -111,6 +106,8 @@ const getMyProfil = async (req, res, next) => {
                 UserObject["name"] = data.data().name
                 UserObject["phoneNumber"] = data.data().phoneNumber
                 UserObject["rate"] = data.data().rate || 0
+                UserObject["fav"] = data.data().fav || []
+                console.log(UserObject);
                 usersArray.push(UserObject);
                 res.send(usersArray);
             }
