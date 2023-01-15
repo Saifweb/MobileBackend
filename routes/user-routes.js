@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, addFav, getFav } = require('../controllers/UserController');
+const { getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, addFav, getFav, } = require('../controllers/UserController');
 const { check } = require("express-validator")
 
 const router = express.Router();
@@ -13,6 +13,7 @@ router.put('/userpass', [check('password').exists().withMessage("Password is req
 router.get('/myprofil', getMyProfil);
 router.get('/getfav', getFav);
 router.put('/addfav', addFav);
+
 
 
 

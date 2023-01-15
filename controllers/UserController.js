@@ -1,6 +1,7 @@
 'use strict';
 
 const firebase = require('../db');
+const fs = require('fs');
 
 
 const firestore = firebase.firestore();
@@ -10,7 +11,6 @@ const getAllUsers = async (req, res, next) => {
     if (user) {
         const me = await firestore.collection('users').doc(user.uid);
         const data = await me.get();
-
         try {
             const users = await firestore.collection('users');
             const data = await users.where("state", "==", "housekeeper").get();
@@ -41,6 +41,7 @@ const getAllUsers = async (req, res, next) => {
     }
 
 }
+
 const updateUser = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -191,5 +192,5 @@ const getFav = async (req, res) => {
 }
 
 module.exports = {
-    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, getFav, addFav
+    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, getFav, addFav,
 }
