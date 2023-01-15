@@ -116,11 +116,12 @@ const getMyProfil = async (req, res, next) => {
                 res.send(usersArray);
             }
         } catch (error) {
-            //error !
+            //
             res.status(400).send(error.message);
         }
     }
     else {
+        //
         res.status(403).json("Acces Denied !")
     }
 
