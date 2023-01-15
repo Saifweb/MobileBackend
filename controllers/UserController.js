@@ -102,18 +102,15 @@ const getMyProfil = async (req, res, next) => {
             if (!data.exists) {
                 res.status(404).send('User with the given ID not found');
             } else {
-                data.forEach(doc => {
-                    var UserObject = new Object;
-                    UserObject["id"] = doc.id
-                    UserObject["state"] = doc.data().state
-                    UserObject["age"] = doc.data().age
-                    UserObject["location"] = doc.data().location
-                    UserObject["name"] = doc.data().name
-                    UserObject["phoneNumber"] = doc.data().phoneNumber
-                    UserObject["rate"] = doc.data().rate || 0
-                    usersArray.push(UserObject);
-                });
-                res.send(usersArray);
+                var UserObject = new Object;
+                UserObject["id"] = data.id
+                UserObject["state"] = data.data().state
+                UserObject["age"] = data.data().age
+                UserObject["location"] = data.data().location
+                UserObject["name"] = data.data().name
+                UserObject["phoneNumber"] = data.data().phoneNumber
+                UserObject["rate"] = data.data().rate || 0
+                res.send(UserObject);
             }
         } catch (error) {
             //
