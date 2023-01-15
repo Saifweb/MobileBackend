@@ -99,6 +99,7 @@ const getMyProfil = async (req, res, next) => {
         try {
             const me = await firestore.collection('users').doc(user.uid);
             const data = await me.get();
+            var usersArray = [];
             if (!data.exists) {
                 res.status(404).send('User with the given ID not found');
             } else {
@@ -110,7 +111,8 @@ const getMyProfil = async (req, res, next) => {
                 UserObject["name"] = data.data().name
                 UserObject["phoneNumber"] = data.data().phoneNumber
                 UserObject["rate"] = data.data().rate || 0
-                res.send(UserObject);
+                usersArray.push(UserObject);
+                res.send(usersArray);
             }
         } catch (error) {
             //
