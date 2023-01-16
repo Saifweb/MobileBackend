@@ -184,18 +184,30 @@ const getFav = async (req, res) => {
         const me = await firestore.collection('users').doc(user.uid);
         const data = await me.get();
         const tab = await data.data().fav;
-        console.log(tab);
         const usersArray = [];
-
-        await tab.forEach(async (favUser) => {
-            const favusers = await firestore.collection('users').doc(favUser).get();
-            console.log(favusers.data());
-            usersArray.push(favusers.data());
-            console.log("hi", usersArray);
-        })
-        await delay(4000);
-        res.status(200).json(usersArray);
-
+        if (tab) {
+            console.log(tab);
+            await tab.forEach(async (favUser) => {
+                const favusers = await firestore.collection('users').doc(favUser).get();
+                console.log(favusers.data());
+                var UserObject = new Object;
+                UserObject["id"] = favusers.id
+                UserObject["state"] = favusers.data().state
+                UserObject["age"] = favusers.data().age
+                UserObject["location"] = favusers.data().location
+                UserObject["name"] = favusers.data().name
+                UserObject["phoneNumber"] = favusers.data().phoneNumber
+                UserObject["rate"] = favusers.data().rate || 0
+                UserObject["fav"] = favusers.data().fav || []
+                usersArray.push(UserObject);
+                console.log("hi", usersArray);
+                await delay(4000);
+                res.status(403).json(usersArray);
+            })
+        }
+        else {
+            res.status(403).send("no record founds !");
+        }
     } else {
         res.status(403).json("Acced Denied !")
     }
