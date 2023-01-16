@@ -5,12 +5,13 @@ const fs = require('fs');
 
 
 const firestore = firebase.firestore();
-//User
+
+//User Controller
+
+//User can See all housekeepers !
 const getAllUsers = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
-        const me = await firestore.collection('users').doc(user.uid);
-        const data = await me.get();
         try {
             const users = await firestore.collection('users');
             const data = await users.where("state", "==", "housekeeper").get();
@@ -42,6 +43,7 @@ const getAllUsers = async (req, res, next) => {
 
 }
 
+//User can Update his data !
 const updateUser = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -59,6 +61,8 @@ const updateUser = async (req, res, next) => {
     }
 
 }
+
+//User Update his email !
 const updateEmail = async (req, res) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -74,6 +78,7 @@ const updateEmail = async (req, res) => {
         res.status(403).json("Acced Denied!");
     }
 }
+//User Update his Password
 const updatePass = async (req, res) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -89,6 +94,7 @@ const updatePass = async (req, res) => {
         res.status(403).json("Acced Denied!");
     }
 }
+//return data of connected User
 const getMyProfil = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -123,6 +129,7 @@ const getMyProfil = async (req, res, next) => {
     }
 
 }
+//get user data ( any user )
 const getUser = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -143,20 +150,23 @@ const getUser = async (req, res, next) => {
         res.status(403).json("Acces Denied !")
     }
 }
+//add User to favorie
 const addFav = async (req, res) => {
     const user = await firebase.auth().currentUser;
     if (user) {
 
         const me = await firestore.collection('users').doc(user.uid);
         const data = await me.get();
-        console.log(await data.data().fav)
-        const tab = await data.data().fav;
-        console.log(tab);
-        await tab.push(req.body.fav);
-        console.log(tab);
+        var tab = await data.data().fav;
+        if (tab) {
+            await tab.push(req.body.fav);
+        }
+        else {
+            tab = [];
+            await tab.push(req.body.fav);
+        }
         await me.update({ "fav": tab });
-        console.log(data.data().fav);
-        res.status(200).send(tab);
+        res.status(200).send("this user is added to Favorite");
     } else {
         //send
         res.status(403).send("Acces Denied !")
@@ -166,7 +176,7 @@ const addFav = async (req, res) => {
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
 }
-
+//Get List of favorite of User !
 const getFav = async (req, res) => {
     const user = await firebase.auth().currentUser;
 

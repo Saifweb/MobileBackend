@@ -1,6 +1,8 @@
 const firebase = require('../db');
 const firestore = firebase.firestore();
 const { validationResult } = require("express-validator")
+
+//User can Sign up !
 const signup = async (req, res) => {
     var errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -26,6 +28,7 @@ const signup = async (req, res) => {
     }
 
 }
+//User can Sign in !
 const signin = async (req, res) => {
     if (!req.body.email || !req.body.password) {
         return res.status(422).json({
@@ -43,6 +46,7 @@ const signin = async (req, res) => {
 
         })
 }
+//Resend Password
 const forgetPassword = (req, res) => {
     console.log(req.body.email);
     if (!req.body.email) {
@@ -62,7 +66,7 @@ const forgetPassword = (req, res) => {
 
         });
 };
-
+//Signout 
 const signout = (req, res) => {
     const user = firebase.auth().currentUser;
     if (user) {
