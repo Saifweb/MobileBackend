@@ -61,7 +61,7 @@ const getAllReservations = async (req, res, next) => {
                         reservationsArray.push(reservationsObject);
                     }
                 });
-                res.send(reservationsArray);
+                res.status(200).send(reservationsArray);
             }
         } catch (error) {
             res.status(400).send(error.message);

@@ -202,7 +202,7 @@ const getFav = async (req, res) => {
                 usersArray.push(UserObject);
                 console.log("hi", usersArray);
                 await delay(4000);
-                res.status(403).json(usersArray);
+                res.status(200).json(usersArray);
             })
         }
         else {
