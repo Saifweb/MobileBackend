@@ -43,6 +43,42 @@ const getAllUsers = async (req, res, next) => {
 
 }
 
+const getUsers = async (req, res, next) => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        try {
+            const users = await firestore.collection('users');
+            const data = await users.get();
+            const usersArray = [];
+            if (data.empty) {
+                res.status(404).send('No User record found');
+            } else {
+                // we return !
+                data.forEach(doc => {
+                    if (doc.id != user.uid) {
+                        var UserObject = new Object;
+                        UserObject["id"] = doc.id
+                        UserObject["state"] = doc.data().state
+                        UserObject["age"] = doc.data().age
+                        UserObject["location"] = doc.data().location
+                        UserObject["name"] = doc.data().name
+                        UserObject["phoneNumber"] = doc.data().phoneNumber
+                        UserObject["rate"] = doc.data().rate || 0
+                        usersArray.push(UserObject);
+                    }
+                });
+                res.send(usersArray);
+            }
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+    else {
+        res.status(403).json("Acces Denied!");
+    }
+
+}
+
 //User can Update his data !
 const updateUser = async (req, res, next) => {
     const user = firebase.auth().currentUser;
@@ -214,5 +250,5 @@ const getFav = async (req, res) => {
 }
 
 module.exports = {
-    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, getFav, addFav,
+    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, getFav, addFav, getUsers
 }

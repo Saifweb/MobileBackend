@@ -148,7 +148,6 @@ const StateDone = async (req, res, next) => {
             };
             var reservation = await firestore.collection('reservations').doc(id);
             var Ourreservation = await reservation.get()
-            console.log(user.uid, Ourreservation.data().housekeeper_id)
             if (Ourreservation.data().housekeeper_id == user.uid) {
                 await reservation.update(jsonUser);
                 res.send("reservations is done!");
