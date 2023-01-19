@@ -12,6 +12,7 @@ router.get('/user/:id', getUser);
 router.put('/updateemail', [check('email').exists().withMessage("email is required !").isEmail().withMessage("Invalid Email")], updateEmail);
 router.put('/userpass', [check('password').exists().withMessage("Password is required !")], updatePass);
 router.get('/myprofil', getMyProfil);
+//routes of fav !
 router.get('/getfav', getFav);
 router.put('/addfav', addFav);
 //update photo !
