@@ -261,11 +261,11 @@ const UpdatePhoto = async (req, res, next) => {
         try {
             console.log(typeof (id))
             const jsonUser = {
-                "photoUrl": req.body.image,
+                "photoUrl": req.body.photo,
             };
             var User = await firestore.collection('users').doc(user.uid);
             await User.update(jsonUser);
-
+            res.status(200).send("updated");
         } catch (error) {
             res.status(400).send(error.message);
         }

@@ -14,7 +14,7 @@ router.put('/userpass', [check('password').exists().withMessage("Password is req
 router.get('/myprofil', getMyProfil);
 router.get('/getfav', getFav);
 router.put('/addfav', addFav);
-router.put('/photo', [check('image').exists().withMessage("image is required !")], UpdatePhoto);
+router.put('/photo', [check('photo').exists().withMessage("photo is required !")], UpdatePhoto);
 
 
 
