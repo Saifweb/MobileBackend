@@ -2,7 +2,7 @@
 
 const firebase = require('../db');
 
-
+//import firestore
 const firestore = firebase.firestore();
 const { validationResult } = require("express-validator")
 
