@@ -4,6 +4,7 @@ const firebase = require('../db');
 
 
 const firestore = firebase.firestore();
+const { validationResult } = require("express-validator")
 
 //User Controller
 
@@ -264,7 +265,6 @@ const UpdatePhoto = async (req, res, next) => {
     else {
         if (user) {
             try {
-                console.log(typeof (id))
                 const jsonUser = {
                     "photoUrl": req.body.photo,
                 };
@@ -276,7 +276,7 @@ const UpdatePhoto = async (req, res, next) => {
             }
         }
         else {
-            res.send("Acces Denied!")
+            res.status(400).send("Acces Denied!")
         }
     }
 
