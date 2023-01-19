@@ -132,37 +132,39 @@ const updatePass = async (req, res) => {
 }
 //return data of connected User
 const getMyProfil = async (req, res, next) => {
-    const user = firebase.auth().currentUser;
-    if (user) {
-        try {
-            const me = await firestore.collection('users').doc(user.uid);
-            const data = await me.get();
-            var usersArray = [];
-            if (!data.exists) {
-                res.status(404).send('User with the given ID not found');
-            } else {
-                var UserObject = new Object;
-                UserObject["id"] = data.id
-                UserObject["state"] = data.data().state
-                UserObject["age"] = data.data().age
-                UserObject["location"] = data.data().location
-                UserObject["name"] = data.data().name
-                UserObject["phoneNumber"] = data.data().phoneNumber
-                UserObject["rate"] = data.data().rate || 0
-                UserObject["fav"] = data.data().fav || []
-                console.log(UserObject);
-                usersArray.push(UserObject);
-                res.send(usersArray);
+    firebase.auth().onAuthStateChanged(async user => {
+        if (user) {
+            try {
+                const me = await firestore.collection('users').doc(user.uid);
+                const data = await me.get();
+                var usersArray = [];
+                if (!data.exists) {
+                    res.status(404).send('User with the given ID not found');
+                } else {
+                    var UserObject = new Object;
+                    UserObject["id"] = data.id
+                    UserObject["state"] = data.data().state
+                    UserObject["age"] = data.data().age
+                    UserObject["location"] = data.data().location
+                    UserObject["name"] = data.data().name
+                    UserObject["phoneNumber"] = data.data().phoneNumber
+                    UserObject["rate"] = data.data().rate || 0
+                    UserObject["fav"] = data.data().fav || []
+                    console.log(UserObject);
+                    usersArray.push(UserObject);
+                    res.send(usersArray);
+                }
+            } catch (error) {
+                //
+                res.status(400).send(error.message);
             }
-        } catch (error) {
-            //
-            res.status(400).send(error.message);
         }
-    }
-    else {
-        //
-        res.status(403).json("Acces Denied !")
-    }
+        else {
+            //
+            res.status(403).json("Acces Denied !")
+        };
+
+    });
 
 }
 //get user data ( any user )
