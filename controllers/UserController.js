@@ -257,22 +257,29 @@ const getFav = async (req, res) => {
 }
 const UpdatePhoto = async (req, res, next) => {
     var user = firebase.auth().currentUser
-    if (user) {
-        try {
-            console.log(typeof (id))
-            const jsonUser = {
-                "photoUrl": req.body.photo,
-            };
-            var User = await firestore.collection('users').doc(user.uid);
-            await User.update(jsonUser);
-            res.status(200).send("updated");
-        } catch (error) {
-            res.status(400).send(error.message);
-        }
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.status(422).json(errors.array())
     }
     else {
-        res.send("Acces Denied!")
+        if (user) {
+            try {
+                console.log(typeof (id))
+                const jsonUser = {
+                    "photoUrl": req.body.photo,
+                };
+                var User = await firestore.collection('users').doc(user.uid);
+                await User.update(jsonUser);
+                res.status(200).send("updated");
+            } catch (error) {
+                res.status(400).send(error.message);
+            }
+        }
+        else {
+            res.send("Acces Denied!")
+        }
     }
+
 }
 module.exports = {
     getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, getFav, addFav, getUsers, UpdatePhoto
