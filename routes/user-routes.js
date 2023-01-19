@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, addFav, getFav, getUsers } = require('../controllers/UserController');
+const { getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, addFav, getFav, getUsers, UpdatePhoto } = require('../controllers/UserController');
 const { check } = require("express-validator")
 
 const router = express.Router();
@@ -14,6 +14,8 @@ router.put('/userpass', [check('password').exists().withMessage("Password is req
 router.get('/myprofil', getMyProfil);
 router.get('/getfav', getFav);
 router.put('/addfav', addFav);
+router.put('/photo', [check('image').exists().withMessage("image is required !")], UpdatePhoto);
+
 
 
 

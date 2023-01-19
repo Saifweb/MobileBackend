@@ -1,7 +1,6 @@
 'use strict';
 
 const firebase = require('../db');
-const fs = require('fs');
 
 
 const firestore = firebase.firestore();
@@ -29,6 +28,7 @@ const getAllUsers = async (req, res, next) => {
                     UserObject["name"] = doc.data().name
                     UserObject["phoneNumber"] = doc.data().phoneNumber
                     UserObject["rate"] = doc.data().rate || 0
+                    UserObject["photoUrl"] = doc.data().rate || ""
                     usersArray.push(UserObject);
                 });
                 res.send(usersArray);
@@ -42,7 +42,7 @@ const getAllUsers = async (req, res, next) => {
     }
 
 }
-
+// return all Users customer and housekpeers 
 const getUsers = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -64,6 +64,7 @@ const getUsers = async (req, res, next) => {
                         UserObject["name"] = doc.data().name
                         UserObject["phoneNumber"] = doc.data().phoneNumber
                         UserObject["rate"] = doc.data().rate || 0
+                        UserObject["photoUrl"] = doc.data().rate || "";
                         usersArray.push(UserObject);
                     }
                 });
@@ -79,7 +80,7 @@ const getUsers = async (req, res, next) => {
 
 }
 
-//User can Update his data !
+//User can Update his data ! we still dident use this function yet !
 const updateUser = async (req, res, next) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -132,37 +133,39 @@ const updatePass = async (req, res) => {
 }
 //return data of connected User
 const getMyProfil = async (req, res, next) => {
-    const user = firebase.auth().currentUser;
-    if (user) {
-        try {
-            const me = await firestore.collection('users').doc(user.uid);
-            const data = await me.get();
-            var usersArray = [];
-            if (!data.exists) {
-                res.status(404).send('User with the given ID not found');
-            } else {
-                var UserObject = new Object;
-                UserObject["id"] = data.id
-                UserObject["state"] = data.data().state
-                UserObject["age"] = data.data().age
-                UserObject["location"] = data.data().location
-                UserObject["name"] = data.data().name
-                UserObject["phoneNumber"] = data.data().phoneNumber
-                UserObject["rate"] = data.data().rate || 0
-                UserObject["fav"] = data.data().fav || []
-                console.log(UserObject);
-                usersArray.push(UserObject);
-                res.send(usersArray);
+    firebase.auth().onAuthStateChanged(async user => {
+        if (user) {
+            try {
+                const me = await firestore.collection('users').doc(user.uid);
+                const data = await me.get();
+                var usersArray = [];
+                if (!data.exists) {
+                    res.status(404).send('User with the given ID not found');
+                } else {
+                    var UserObject = new Object;
+                    UserObject["id"] = data.id
+                    UserObject["state"] = data.data().state
+                    UserObject["age"] = data.data().age
+                    UserObject["location"] = data.data().location
+                    UserObject["name"] = data.data().name
+                    UserObject["phoneNumber"] = data.data().phoneNumber
+                    UserObject["rate"] = data.data().rate || 0
+                    UserObject["fav"] = data.data().fav || []
+                    console.log(UserObject);
+                    usersArray.push(UserObject);
+                    res.send(usersArray);
+                }
+            } catch (error) {
+                //
+                res.status(400).send(error.message);
             }
-        } catch (error) {
-            //
-            res.status(400).send(error.message);
         }
-    }
-    else {
-        //
-        res.status(403).json("Acces Denied !")
-    }
+        else {
+            //
+            res.status(403).json("Acces Denied !")
+        };
+
+    });
 
 }
 //get user data ( any user )
@@ -248,7 +251,25 @@ const getFav = async (req, res) => {
         res.status(403).json("Acced Denied !")
     }
 }
+const UpdatePhoto = async (req, res, next) => {
+    var user = firebase.auth().currentUser
+    if (user) {
+        try {
+            console.log(typeof (id))
+            const jsonUser = {
+                "photoUrl": req.body.image,
+            };
+            var User = await firestore.collection('users').doc(user.uid);
+            await User.update(jsonUser);
 
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+    else {
+        res.send("Acces Denied!")
+    }
+}
 module.exports = {
-    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, getFav, addFav, getUsers
+    getAllUsers, updateUser, getUser, getMyProfil, updateEmail, updatePass, getFav, addFav, getUsers, UpdatePhoto
 }
