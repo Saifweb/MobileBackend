@@ -28,7 +28,9 @@ const getAllUsers = async (req, res, next) => {
                     UserObject["name"] = doc.data().name
                     UserObject["phoneNumber"] = doc.data().phoneNumber
                     UserObject["rate"] = doc.data().rate || 0
-                    UserObject["photoUrl"] = doc.data().fav || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png"
+                    UserObject["fav"] = doc.data().fav || []
+                    UserObject["photoUrl"] = doc.data().photoUrl || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png";
+
                     usersArray.push(UserObject);
                 });
                 res.send(usersArray);
@@ -64,7 +66,7 @@ const getUsers = async (req, res, next) => {
                         UserObject["name"] = doc.data().name
                         UserObject["phoneNumber"] = doc.data().phoneNumber
                         UserObject["rate"] = doc.data().rate || 0
-                        UserObject["photoUrl"] = doc.data().fav || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png";
+                        UserObject["photoUrl"] = doc.data().photoUrl || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png";
                         usersArray.push(UserObject);
                     }
                 });
@@ -151,7 +153,7 @@ const getMyProfil = async (req, res, next) => {
                     UserObject["phoneNumber"] = data.data().phoneNumber
                     UserObject["rate"] = data.data().rate || 0
                     UserObject["fav"] = data.data().fav || []
-                    UserObject["photoUrl"] = doc.data().fav || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png";
+                    UserObject["photoUrl"] = doc.data().photoUrl || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png";
                     console.log(UserObject);
                     usersArray.push(UserObject);
                     res.send(usersArray);
@@ -239,7 +241,7 @@ const getFav = async (req, res) => {
                 UserObject["phoneNumber"] = favusers.data().phoneNumber
                 UserObject["rate"] = favusers.data().rate || 0
                 UserObject["fav"] = favusers.data().fav || []
-                UserObject["photoUrl"] = doc.data().fav || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png"
+                UserObject["photoUrl"] = doc.data().photoUrl || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png"
                 usersArray.push(UserObject);
                 console.log("hi", usersArray);
                 await delay(4000);
