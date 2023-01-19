@@ -14,6 +14,7 @@ router.put('/userpass', [check('password').exists().withMessage("Password is req
 router.get('/myprofil', getMyProfil);
 router.get('/getfav', getFav);
 router.put('/addfav', addFav);
+//update photo !
 router.put('/photo', [check('photo').exists().withMessage("photo is required !")], UpdatePhoto);
 
 
