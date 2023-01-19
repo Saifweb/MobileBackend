@@ -241,7 +241,7 @@ const getFav = async (req, res) => {
                 UserObject["phoneNumber"] = favusers.data().phoneNumber
                 UserObject["rate"] = favusers.data().rate || 0
                 UserObject["fav"] = favusers.data().fav || []
-                UserObject["photoUrl"] = doc.data().photoUrl || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png"
+                UserObject["photoUrl"] = favusers.data().photoUrl || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png"
                 usersArray.push(UserObject);
                 console.log("hi", usersArray);
                 await delay(4000);
