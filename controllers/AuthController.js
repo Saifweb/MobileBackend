@@ -72,6 +72,12 @@ const signout = (req, res) => {
     const user = firebase.auth().currentUser;
     if (user) {
         firebase.auth().signOut().then(() => {
+            firestore
+                .collection('users')
+                .doc(user.uid)
+                .update({
+                    "status": "Offline",
+                });
             res.send("user Successufully logged out!")
         })
             .catch(function (error) {
