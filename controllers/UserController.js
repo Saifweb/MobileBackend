@@ -156,7 +156,7 @@ const getMyProfil = async (req, res, next) => {
                     UserObject["phoneNumber"] = data.data().phoneNumber
                     UserObject["rate"] = data.data().rate || 0
                     UserObject["fav"] = data.data().fav || []
-                    UserObject["status"] = doc.data().status || "Online"
+                    UserObject["status"] = data.data().status || "Online"
                     UserObject["photoUrl"] = data.data().photoUrl || "https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png";
                     console.log(UserObject);
                     usersArray.push(UserObject);
